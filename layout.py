@@ -13,31 +13,6 @@ import board1def
 import yaml
 from jinja2 import Template
 
-# from yaml import load, dump
-# try:
-#     from yaml import CLoader as Loader, CDumper as Dumper
-# except ImportError:
-#     from yaml import Loader, Dumper
-
-# import templates
-
-# if len(sys.argv)!=2:
-#   print(f"""
-# usage: {sys.argv[0]} board_name
-#   """)
-# board_name = sys.argv[1]
-
-# class Board:
-#   def __init__(self,fn):
-#     stream = open(fn, 'r')    
-#     self.data = load(stream, Loader=yaml.CLoader)
-
-#   def __call__(self):
-#     return self.data
-
-# board = Board(board_name)()
-# board = yaml.load(open(f"{board_name}.yml","r"),Loader=yaml.CLoader)
-
 class Stream:
   def __init__(self):
     self.clear()
@@ -56,10 +31,6 @@ class Stream:
 
   def __str__(self):
     return "\n".join(self.stream)
-
-# html_complete = Stream()
-# html_body = Stream()
-# css = Stream()
 
 class Element:
   def __init__(self,name,classes,html,css):
@@ -91,10 +62,10 @@ class Html(Element):
     super().__init__("html",None,html,css)
     css << Template(templates.css_html).render(board["html"])
 
-class Header(Element):
+class Head(Element):
   def __init__(self,html):
-    super().__init__("header",classes=None,html=html,css=None)
-    html << str(Template(templates.html_header))
+    super().__init__("head",classes=None,html=html,css=None)
+    # html << Template(templates.html_head)
 
 class Body(Element):
   def __init__(self,classes,html,css):
@@ -159,8 +130,6 @@ class Style:
   def get_css(self):
     return str(self.css)
 
-# importlib.import_module(sys.argv[1])
-
 if __name__=="__main__":
 
   if len(sys.argv)!=2:
@@ -178,21 +147,6 @@ usage: {sys.argv[0]} board_name
   html_body = Stream()
   css = Stream()
 
-  # s = Stream()
-  # s << "1"
-  # s.inc()
-  # s << "2"
-  # print(s)
-
-  # with Element("test",classes=[]) as e:
-  #   e.html << "azerty"
-  #   with Element("test2",classes=["un","deux"]) as e:
-  #     e.html << "qsdf"
-  #   e.html << "azerty"
-  
-    # print(html)
-    # html.clear()
-
   css << Template(templates.css_glob).render(board["glob"])
 
   with Body(classes=[],html=html_body,css=css):
@@ -204,31 +158,14 @@ usage: {sys.argv[0]} board_name
           # with Element(f["elt"],classes=[f"f{i}"]) as elt:
           with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],html=html_body,css=css) as elt:
             pass
-          # if "img" in frame:
-          #   elt = "figure"
-          # with Frame(f"f{i}"):
-          #   pass
-          # cl = f"f{i}"
-          # with Style(cl) as st:
-          #   # st.css << f"grid-column: {f['coord'][0][0]} / span {f['coord'][0][1]}"
-          #   # st.css << f"grid-row: {f['coord'][1][0]} / span {f['coord'][1][1]}"
-          #   if "img" in f:
-          #     st.css << f"grid-area: i{i}"
-          #     with Element("figure",[cl]) as fig:
-          #       fig.html << "<img ..>"
-          #   if "text" in f:
-          #     st.css << f"grid-area: t{i}"
-          #     with Element("div",[cl]) as text:
-          #       text.html << f["text"]
-            
-  # print(html_body)
 
+  html_complete << "<!DOCTYPE html>"
   with Html(html=html_complete,css=css):
-    with Header(html=html_complete):
-      html_complete << Template(templates.html_header).render({"inline_style": css})
+    with Head(html=html_complete):
+      html_complete << Template(templates.html_head).render({"inline_style": css})
     html_complete << html_body  
 
-  with open(f"build/{board_name}","w") as f:  
+  with open(f"build/{board_name}.html","w") as f:  
     print(html_complete, file=f)
 
   print(html_complete)
