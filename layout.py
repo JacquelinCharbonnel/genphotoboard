@@ -1,6 +1,8 @@
 #!/bin/env python
 
 """
+Jacquelin Charbonnel 2025
+
 https://www.freecodecamp.org/news/how-to-create-an-image-gallery-with-css-grid-e0f0fd666a5c/
 https://visme.co/blog/fr/mise-en-page/
 https://developer.mozilla.org/fr/docs/Web/CSS/CSS_grid_layout/Grid_template_areas
@@ -9,37 +11,35 @@ https://developer.mozilla.org/fr/docs/Web/CSS/CSS_grid_layout/Grid_template_area
 import sys, importlib
 import board1def
 from jinja2 import Template
+import yaml
+from jinja2 import Template
 
-from yaml import load, dump
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
+# from yaml import load, dump
+# try:
+#     from yaml import CLoader as Loader, CDumper as Dumper
+# except ImportError:
+#     from yaml import Loader, Dumper
 
-import skel
+# import templates
 
-class Board:
-  def __init__(self,fn):
-    stream = open(fn, 'r')    
-    self.data = load(stream, Loader=Loader)
+if len(sys.argv)!=2:
+  print(f"""
+usage: {sys.argv[0]} board_name
+  """)
+board_name = sys.argv[1]
 
-  def __call__(self):
-    return self.data
+# class Board:
+#   def __init__(self,fn):
+#     stream = open(fn, 'r')    
+#     self.data = load(stream, Loader=yaml.CLoader)
 
-board = Board(sys.argv[1])()
-# skel = load(open("skel.yml","r"), Loader=Loader)
+#   def __call__(self):
+#     return self.data
 
-frame = \
-  [
-    {
-      "img": "img/im.webp"
-      , "coord" : ((0,2),(0,2))
-    }
-    , {
-        "text": "un texte ici"
-        , "coord": ((2,2),(0,2))
-    }
-  ]
+# board = Board(board_name)()
+board = yaml.load(open(f"{board_name}.yml","r"),Loader=yaml.CLoader)
+
+templates = importlib.import_module(board["template"])
 
 class Stream:
   def __init__(self):
@@ -60,11 +60,12 @@ class Stream:
   def __str__(self):
     return "\n".join(self.stream)
 
-html = Stream()
+html_complete = Stream()
+html_body = Stream()
 css = Stream()
 
 class Element:
-  def __init__(self,name,classes=[],html=html,css=css):
+  def __init__(self,name,classes,html,css):
     self.name = name
     self.html = html
     self.css = css
@@ -83,32 +84,37 @@ class Element:
 
   def __exit__(self,type,value,traceback):
     self.html.dec()
-    self.html << f"</{self.name}>"
+    self.html << f"</{self.name}> <!-- {self.classes} -->"
 
   def get_html(self):
     return str(self.html)
 
 class Html(Element):
-  def __init__(self):
-    super().__init__("html")
-    css << Template(skel.html).render(board["html"])
+  def __init__(self,html=None,css=css):
+    super().__init__("html",None,html,css)
+    css << Template(templates.css_html).render(board["html"])
+
+class Header(Element):
+  def __init__(self,html=html_complete):
+    super().__init__("header",classes=None,html=html,css=None)
+    html << str(Template(templates.html_header))
 
 class Body(Element):
-  def __init__(self):
-    super().__init__("body")
-    css << Template(skel.body).render(board["body"])
+  def __init__(self,classes=[],html=html_body,css=css):
+    super().__init__("body",classes=classes,html=html,css=css)
+    css << Template(templates.css_body).render(board["body"])
 
 class H1(Element):
-  def __init__(self):
-    super().__init__("h1")
+  def __init__(self,classes=[],html=html_body,css=css):
+    super().__init__("h1",classes=classes,html=html,css=css)
 
 class Container(Element):
-  def __init__(self):
-    super().__init__("div",["container"])
+  def __init__(self,classes=[],html=html_body,css=css):
+    super().__init__("div",["container"],html=html,css=css)
 
 class Grid(Element):
-  def __init__(self,classes=[],html=html,css=css):
-    super().__init__("div",["grid"],html,css)
+  def __init__(self,classes=[],html=html_body,css=css):
+    super().__init__("div",["grid"],html=html,css=css)
     with Style("grid") as st:
       for l in f"""\
 display: grid;
@@ -121,20 +127,20 @@ grid-template-areas:
         self.css << l
         
 class Frame(Element):
-  def __init__(self,name,id,classes=[],html=html,css=css):
-    super().__init__(name,classes,html=html)
-    with Style(name) as st:
+  def __init__(self,name,id,classes=[],html=html_body,css=css):
+    super().__init__(name,classes=classes,html=html,css=css)
+    with Style(f"f{id+1}") as st:
       self.css << f"grid-area: f{id+1};"
 
 class Figure(Frame):
-  def __init__(self,name,id,classes=["figure"],html=html,css=css):
-    super().__init__("figure",id,classes,html=html)
+  def __init__(self,name,id,classes=["figure"],html=html_body,css=css):
+    super().__init__("figure",id,classes=classes,html=html,css=css)
 
     html << f"""<img src="{board['frame'][id]["img"]}" alt="Board image" class="figure">"""
 
 class Div(Frame):
-  def __init__(self,name,id,classes=[],html=html,css=css):
-    super().__init__("div",id,classes,html=html)
+  def __init__(self,name,id,classes=[],html=html_body,css=css):
+    super().__init__("div",id,classes=classes,html=html,css=css)
 
     html << f"""{board['frame'][id]["text"]}"""
 
@@ -177,10 +183,9 @@ if __name__=="__main__":
     # print(html)
     # html.clear()
 
-  css << Template(skel.glob).render(board["glob"])
+  css << Template(templates.css_glob).render(board["glob"])
 
-  with Html():
-   with Body():
+  with Body():
     with H1() as h1:
      h1.html << "mon titre"
     with Container() as c:
@@ -206,13 +211,23 @@ if __name__=="__main__":
           #     with Element("div",[cl]) as text:
           #       text.html << f["text"]
             
+  # print(html_body)
 
-print(html)
-print(css)
-# # print(skel["skel"])
-# print(str(skel))
+  with Html(html=html_complete):
+    with Header(html=html_complete):
+      html_complete << Template(templates.html_header).render({"inline_style": css})
+    html_complete << html_body  
+
+  with open(f"build/{board_name}","w") as f:  
+    print(html_complete, file=f)
+
+  print(html_complete)
+
+  # print(css)
+# # print(templates["templates"])
+# print(str(templates))
 # print(board["body"]["background_color"])
-# print(skel.format(**vars()))    
+# print(templates.format(**vars()))    
 # # print(board["body"])  
 # print(vars())
 # print(sys.argv[1])
