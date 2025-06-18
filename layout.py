@@ -130,7 +130,6 @@ usage: {sys.argv[0]} board_name
     """)
   board_name = sys.argv[1]
 
-
   board = yaml.load(open(f"{board_name}.yml","r"),Loader=yaml.CLoader)
 
   templates = importlib.import_module(board["template"])
@@ -163,11 +162,3 @@ usage: {sys.argv[0]} board_name
 
   print(html_complete)
 
-  # print(css)
-# # print(templates["templates"])
-# print(str(templates))
-# print(board["body"]["background_color"])
-# print(templates.format(**vars()))    
-# # print(board["body"])  
-# print(vars())
-# print(sys.argv[1])

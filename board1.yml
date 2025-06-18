@@ -1,0 +1,51 @@
+---
+
+template: templates
+
+glob: []
+
+html:
+  font_size: "62.5%"
+
+header: []
+
+body:
+  background_color: "#860b0b6c"
+  font_size : 2vw
+
+container: []
+
+grid:
+  cols: 8
+  rows: 8
+  gap: 1.5rem
+  areas: |+
+    "f1 f1 f2 f2 f3 f3 f3 f3"
+    "f1 f1 f2 f2 f3 f3 f3 f3"
+    "f4 f4 f4 f4 f3 f3 f3 f3"
+    "f4 f4 f4 f4 f3 f3 f3 f3"
+    "f4 f4 f4 f4 f3 f3 f3 f3"
+    "f5 f5 f5 f5 f6 f6 f6 f6"
+    "f5 f5 f5 f5 f6 f6 f6 f6"
+    "f5 f5 f5 f5 f6 f6 f6 f6"
+
+frame:
+  - img: img/sq1.jpg
+    elt: Figure
+
+  - text: un texte ici
+    elt: Text
+    
+  - img: img/sq2.jpg
+    elt: Figure
+    
+  - img: img/sq2.jpg
+    elt: Figure
+    
+  - img: img/sq1.jpg
+    elt: Figure
+    
+  - img: img/im1.webp
+    elt: Figure
+
+frame_figure: []
