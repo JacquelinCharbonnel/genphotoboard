@@ -85,17 +85,6 @@ class Grid(Element):
   def __init__(self,classes,html,css):
     super().__init__("div",["grid"],html=html,css=css)
     css << Template(templates.css_grid).render(board["grid"])
-
-#     with Style("grid",css) as st:
-#       for l in f"""\
-# display: grid;
-# grid-template-columns: repeat({board["grid"]["cols"]}, 1fr);
-# grid-template-rows: repeat(8, 5vw);
-# grid-gap: 1.5rem;
-# grid-template-areas:
-# {board["grid"]["areas"]}
-# """.split("\n"):
-#         self.css << l
         
 class Frame(Element):
   def __init__(self,name,id,classes,html,css):
