@@ -79,20 +79,23 @@ class H1(Element):
 class Container(Element):
   def __init__(self,classes,html,css):
     super().__init__("div",["container"],html=html,css=css)
+    css << Template(templates.css_container).render(board["container"])
 
 class Grid(Element):
   def __init__(self,classes,html,css):
     super().__init__("div",["grid"],html=html,css=css)
-    with Style("grid",css) as st:
-      for l in f"""\
-display: grid;
-grid-template-columns: repeat({board["grid"]["cols"]}, 1fr);
-grid-template-rows: repeat(8, 5vw);
-grid-gap: 1.5rem;
-grid-template-areas:
-{board["grid"]["areas"]}
-""".split("\n"):
-        self.css << l
+    css << Template(templates.css_grid).render(board["grid"])
+
+#     with Style("grid",css) as st:
+#       for l in f"""\
+# display: grid;
+# grid-template-columns: repeat({board["grid"]["cols"]}, 1fr);
+# grid-template-rows: repeat(8, 5vw);
+# grid-gap: 1.5rem;
+# grid-template-areas:
+# {board["grid"]["areas"]}
+# """.split("\n"):
+#         self.css << l
         
 class Frame(Element):
   def __init__(self,name,id,classes,html,css):
@@ -104,9 +107,9 @@ class Figure(Frame):
   def __init__(self,name,id,classes,html,css):
     super().__init__("figure",id,classes,html,css)
 
-    html << f"""<img src="{board['frame'][id]["img"]}" alt="Board image" class="figure">"""
+    html << f"""<img src="{board['frame'][id]["img"]}" alt="Board image" class="frame_figure">"""
 
-class Div(Frame):
+class Text(Frame):
   def __init__(self,name,id,classes,html,css):
     super().__init__("div",id,classes,html,css)
 
@@ -154,6 +157,7 @@ usage: {sys.argv[0]} board_name
      h1.html << "mon titre"
     with Container(classes=[],html=html_body,css=css) as c:
       with Grid(classes=[],html=html_body,css=css) as g:
+        css << Template(templates.css_frame_figure).render(board["frame_figure"])
         for (i,f) in enumerate(board["frame"]) :
           # with Element(f["elt"],classes=[f"f{i}"]) as elt:
           with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],html=html_body,css=css) as elt:
