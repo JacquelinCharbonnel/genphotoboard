@@ -1,6 +1,7 @@
 ---
 
-template: ./board2/templates.py
+template_file: ./templates.py
+output_file: ./index.html
 
 glob: []
 

@@ -135,7 +135,10 @@ usage: {sys.argv[0]} board_name
   board_def = os.path.join(board_dir,"board.yml")
 
   board = yaml.load(open(board_def,"r"),Loader=yaml.CLoader)
-  template_file = board["template"]
+
+  os.chdir(board_dir)
+
+  template_file = board["template_file"]
   print(template_file)   
   template_spec = importlib.util.spec_from_file_location("templates", template_file)
   templates = importlib.util.module_from_spec(template_spec)
@@ -165,8 +168,8 @@ usage: {sys.argv[0]} board_name
       html_complete << Template(templates.html_head).render({"inline_style": css})
     html_complete << html_body  
 
-  html_file = os.path.join(board_dir,"index.html")
-  with open(html_file,"w") as f:  
+  # html_file = os.path.join(board_dir,"index.html")
+  with open(board["output_file"],"w") as f:  
     print(html_complete, file=f)
 
   print(html_complete)
