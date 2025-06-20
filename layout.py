@@ -6,9 +6,11 @@ Jacquelin Charbonnel 2025
 https://www.freecodecamp.org/news/how-to-create-an-image-gallery-with-css-grid-e0f0fd666a5c/
 https://visme.co/blog/fr/mise-en-page/
 https://developer.mozilla.org/fr/docs/Web/CSS/CSS_grid_layout/Grid_template_areas
+https://www.youtube.com/watch?v=2R525oEOl2s
+
 """
 
-import sys, importlib
+import sys, os, importlib
 import board1def
 import yaml
 from jinja2 import Template
@@ -128,11 +130,16 @@ if __name__=="__main__":
     print(f"""
 usage: {sys.argv[0]} board_name
     """)
-  board_name = sys.argv[1]
+  board_dir = sys.argv[1]
+  board_def = os.path.join(board_dir,"board.yml")
 
-  board = yaml.load(open(f"{board_name}.yml","r"),Loader=yaml.CLoader)
-
-  templates = importlib.import_module(board["template"])
+  board = yaml.load(open(board_def,"r"),Loader=yaml.CLoader)
+  template_file = board["template"]
+  print(template_file)   
+  template_spec = importlib.util.spec_from_file_location("templates", template_file)
+  templates = importlib.util.module_from_spec(template_spec)
+  sys.modules["templates"] = templates
+  template_spec.loader.exec_module(templates)
 
   html_complete = Stream()
   html_body = Stream()
@@ -157,7 +164,8 @@ usage: {sys.argv[0]} board_name
       html_complete << Template(templates.html_head).render({"inline_style": css})
     html_complete << html_body  
 
-  with open(f"build/{board_name}.html","w") as f:  
+  html_file = os.path.join(board_dir,"index.html")
+  with open(html_file,"w") as f:  
     print(html_complete, file=f)
 
   print(html_complete)

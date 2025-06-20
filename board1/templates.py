@@ -25,7 +25,7 @@ body {
   color: #333;
   font-weight: 300;
   line-height: 1.6; 
-  background_color: "{{background_color}}"
+  background-color: {{background_color}}
 }"""
 
 css_container = """
@@ -48,7 +48,8 @@ css_frame_figure = """
 .frame_figure {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  # object-fit: cover;
+  object-fit: scale-down; #jc
   display: block; 
 }"""
 

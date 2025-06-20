@@ -1,6 +1,8 @@
 ---
 
-template: templates
+template: templates.py
+# template: /home/jaclin/devel/cssphoto/templates.py
+
 
 glob: []
 
@@ -10,7 +12,8 @@ html:
 header: []
 
 body:
-  background_color: "#860b0b6c"
+#  background_color: "#860b0b6c"
+  background_color: "#022d5593"
   font_size : 2vw
 
 container: []
