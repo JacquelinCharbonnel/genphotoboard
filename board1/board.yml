@@ -1,7 +1,6 @@
 ---
 
-template: templates.py
-# template: /home/jaclin/devel/cssphoto/templates.py
+template: ./board1/templates.py
 
 
 glob: []
