@@ -66,3 +66,7 @@ html_head = """
   </style>
   <title>CSS Grids Gallery</title>
 """        
+
+html_figure = """
+        <img src="{{image}}" alt="Board image" class="frame_figure">
+"""

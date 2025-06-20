@@ -98,7 +98,8 @@ class Figure(Frame):
   def __init__(self,name,id,classes,html,css):
     super().__init__("figure",id,classes,html,css)
 
-    html << f"""<img src="{board['frame'][id]["img"]}" alt="Board image" class="frame_figure">"""
+    # html << f"""<img src="{board['frame'][id]["img"]}" alt="Board image" class="frame_figure">"""
+    html << Template(templates.html_figure).render({"image": board['frame'][id]["img"]})
 
 class Text(Frame):
   def __init__(self,name,id,classes,html,css):
