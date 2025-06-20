@@ -1,0 +1,56 @@
+---
+
+template: ./board2/templates.py
+
+glob: []
+
+html:
+  font_size: "62.5%"
+
+header: []
+
+body:
+  background_color: "#022d5593"
+  font_size : 2vw
+
+container: []
+
+grid:
+  cols: 12
+  rows: 9
+  gap: 1.5rem
+  areas: |+
+    ".. f2 f2 f2 .  .. f3 f3 f3 f3 f3 f3"
+    "f4 f4 f4 f4 f4 .. f3 f3 f3 f3 f3 f3"
+    "f4 f4 f4 f4 f4 .. f3 f3 f3 f3 f3 f3"
+    "f4 f4 f4 f4 f4 .. f3 f3 f3 f3 f3 f3"
+    "f4 f4 f4 f4 f4 .  .. .. .. .. f1 f1"
+    "f4 f4 f4 f4 f4 .  .. .. f6 .. f1 f1"
+    "f5 f5 f5 f5 f5 f5 f5 f5 f6 .. f1 f1"
+    "f5 f5 f5 f5 f5 f5 f5 f5 f6 .. f1 f1"
+    "f5 f5 f5 f5 f5 f5 f5 f5 .. .. f1 f1"
+
+frame:
+  - img: DSC04887.webp
+    elt: Figure
+
+  - text: un texte ici
+    elt: Text
+    
+  - img: DSC04878.webp  
+    elt: Figure
+    
+  - img: DSC04881.webp 
+    elt: Figure
+    
+  - img: DSC04882.webp
+    elt: Figure
+    
+  - img: carte.png  
+    elt: Figure
+
+frame_figure: []
+
+#  
+#   
+# 
