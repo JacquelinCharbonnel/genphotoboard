@@ -15,6 +15,10 @@ body:
   background_color: "#022d5593"
   font_size : 2vw
 
+main: 
+  width: 90µ
+  margin: auto
+
 container: []
 
 grid:

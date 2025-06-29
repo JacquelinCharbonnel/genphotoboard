@@ -7,7 +7,14 @@ https://www.freecodecamp.org/news/how-to-create-an-image-gallery-with-css-grid-e
 https://visme.co/blog/fr/mise-en-page/
 https://developer.mozilla.org/fr/docs/Web/CSS/CSS_grid_layout/Grid_template_areas
 https://www.youtube.com/watch?v=2R525oEOl2s
+https://www.pierre-giraud.com/grille-css-guide-complet-grid-layout/
+https://www.ionos.fr/digitalguide/sites-internet/creation-de-sites-internet/grilles-css/
 
+https://layout.bradwoods.io/customize
+https://www.cssportal.com/css-flexbox-generator/
+
+https://tutorialzine.com/2017/02/freebie-4-bootstrap-galleries
+https://fr.piwigo.org/piwigo-cest-quoi
 """
 
 import sys, os, importlib
@@ -74,6 +81,11 @@ class Body(Element):
     super().__init__("body",classes=classes,html=html,css=css)
     css << Template(templates.css_body).render(board["body"])
 
+class Main(Element):
+  def __init__(self,classes,html,css):
+    super().__init__("main",classes,html=html,css=css)
+    css << Template(templates.css_main).render(board["main"])
+
 class H1(Element):
   def __init__(self,classes,html,css):
     super().__init__("h1",classes=classes,html=html,css=css)
@@ -99,13 +111,14 @@ class Figure(Frame):
     super().__init__("figure",id,classes,html,css)
 
     # html << f"""<img src="{board['frame'][id]["img"]}" alt="Board image" class="frame_figure">"""
-    html << Template(templates.html_figure).render({"image": board['frame'][id]["img"]})
+    html << Template(templates.html_frame_figure).render({"image": board['frame'][id]["img"]})
 
 class Text(Frame):
   def __init__(self,name,id,classes,html,css):
     super().__init__("div",id,classes,html,css)
 
-    html << f"""{board['frame'][id]["text"]}"""
+    html << Template(templates.html_frame_text).render({"text": board['frame'][id]["text"]})
+    # html << f"""{board['frame'][id]["text"]}"""
 
 class Style:
   def __init__(self,name,css):
@@ -125,14 +138,26 @@ class Style:
   def get_css(self):
     return str(self.css)
 
+class Page:
+  def __init__(self):
+    pass
+
+class Board(Page):
+  def __init__(self):
+    pass
+
+  def render(self):      
+
 if __name__=="__main__":
 
-  if len(sys.argv)!=2:
+  if len(sys.argv)!=3:
     print(f"""
-usage: {sys.argv[0]} board_name
+usage: {sys.argv[0]} working_dir board_name
     """)
+    exit(1)
   board_dir = sys.argv[1]
-  board_def = os.path.join(board_dir,"board.yml")
+  board_name = sys.argv[2]
+  board_def = os.path.join(board_dir,board_name)
 
   board = yaml.load(open(board_def,"r"),Loader=yaml.CLoader)
 
@@ -152,15 +177,17 @@ usage: {sys.argv[0]} board_name
   css << Template(templates.css_glob).render(board["glob"])
 
   with Body(classes=[],html=html_body,css=css):
-    with H1(classes=[],html=html_body,css=css) as h1:
-     h1.html << "mon titre"
-    with Container(classes=[],html=html_body,css=css) as c:
-      with Grid(classes=[],html=html_body,css=css) as g:
-        css << Template(templates.css_frame_figure).render(board["frame_figure"])
-        for (i,f) in enumerate(board["frame"]) :
-          # with Element(f["elt"],classes=[f"f{i}"]) as elt:
-          with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],html=html_body,css=css) as elt:
-            pass
+    with Main(classes=[],html=html_body,css=css):
+    #  with H1(classes=[],html=html_body,css=css) as h1:
+    #   h1.html << "mon titre"
+     with Container(classes=[],html=html_body,css=css) as c:
+       with Grid(classes=[],html=html_body,css=css) as g:
+         css << Template(templates.css_frame_figure).render(board["frame_figure"])
+         css << Template(templates.css_frame_text).render(board["frame_text"])
+         for (i,f) in enumerate(board["frame"]) :
+           # with Element(f["elt"],classes=[f"f{i}"]) as elt:
+           with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],html=html_body,css=css) as elt:
+             pass
 
   html_complete << "<!DOCTYPE html>"
   with Html(html=html_complete,css=css):

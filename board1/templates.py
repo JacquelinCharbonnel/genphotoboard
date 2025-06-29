@@ -28,6 +28,12 @@ body {
   background-color: {{background_color}}
 }"""
 
+css_main = """
+main {
+  width: 90%;
+  margin: auto;
+}"""
+
 css_container = """
 .container {
   width: 60%;

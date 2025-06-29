@@ -25,13 +25,15 @@ body {
   color: #333;
   font-weight: 300;
   line-height: 1.6; 
-  background-color: {{background_color}}
+  background-color: {{background_color}};
 }"""
+
+css_main = ""
 
 css_container = """
 .container {
-  width: 60%;
-  margin: 2rem auto;
+  width: 90%;
+  margin: 1rem auto;
 }"""
   
 css_grid = """
@@ -40,6 +42,7 @@ css_grid = """
   grid-template-columns: repeat({{cols}}, 1fr);
   grid-template-rows: repeat({{rows}}, 5vw);
   grid-gap: {{gap}};
+  justify-items: center;
   grid-template-areas:
 {{areas}};
 }"""
@@ -51,6 +54,13 @@ css_frame_figure = """
   # object-fit: cover;
   object-fit: scale-down; #jc
   display: block; 
+}"""
+
+css_frame_text = """
+.frame_text {
+  font-size: {{font_size}};
+  color: {{color}};
+  font-weight: {{font_weight}};
 }"""
 
 html_head = """
@@ -69,8 +79,12 @@ html_head = """
   <title>CSS Grids Gallery</title>
 """        
 
-html_figure = """
+html_frame_figure = """
         <a href="{{image}}" target="max">
           <img src="{{image}}" alt="Board image" class="frame_figure">
         </a>  
+"""
+
+html_frame_text = """
+        <div class="frame_text">{{text}}</div>
 """
