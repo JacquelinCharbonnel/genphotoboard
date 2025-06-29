@@ -75,6 +75,32 @@ html_head = """
     {{inline_style}}
   </style>
   <script>
+    window.onload = () => {
+      const modale = document.querySelector("#modale");
+      const close = document.querySelector(".close");
+      const links = document.querySelectorAll(".grid figure a");
+      console.log(links)
+
+      for (let link of links) {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+
+          console.log(link)
+          const image = modale.querySelector(".modale-content img");
+          image.src = this.href;
+
+          modale.classList.add("show");
+        }) ;
+      }
+
+      close.addEventListener("click", function() {
+        modale.classList.remove("show");
+      }) ;
+
+      modale.addEventListener("click", function() {
+        modale.classList.remove("show");
+      }) ;
+    }
   </script>
   <title>CSS Grids Gallery</title>
 """        
@@ -88,3 +114,53 @@ html_frame_figure = """
 html_frame_text = """
         <div class="frame_text">{{text}}</div>
 """
+
+html_modale = """
+    <div id="modale" class="modale">
+      <span class="close">&times;</span>
+      <div class="modale-content">
+        <img src="" alt="" />
+      </div>
+    </div>
+"""
+
+css_modale = """
+
+.modale {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: {{background}};
+}
+
+.modale.show {
+  display: initial;
+}
+
+.modale-content {
+  width: 90%;
+  margin: auto;
+  /* max-width: 1200px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.modale-content img {
+  width: 100%;
+} 
+
+.close {
+  color: white ;
+  font-size: 2em;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+"""      
+

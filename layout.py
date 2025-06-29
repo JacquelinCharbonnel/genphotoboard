@@ -67,7 +67,7 @@ class Element:
     return str(self.html)
 
 class Html(Element):
-  def __init__(self,html,css):
+  def __init__(self,templates,html,css):
     super().__init__("html",None,html,css)
     css << Template(templates.css_html).render(board["html"])
 
@@ -77,12 +77,12 @@ class Head(Element):
     # html << Template(templates.html_head)
 
 class Body(Element):
-  def __init__(self,classes,html,css):
+  def __init__(self,classes,templates,html,css):
     super().__init__("body",classes=classes,html=html,css=css)
     css << Template(templates.css_body).render(board["body"])
 
 class Main(Element):
-  def __init__(self,classes,html,css):
+  def __init__(self,classes,templates,html,css):
     super().__init__("main",classes,html=html,css=css)
     css << Template(templates.css_main).render(board["main"])
 
@@ -91,31 +91,31 @@ class H1(Element):
     super().__init__("h1",classes=classes,html=html,css=css)
 
 class Container(Element):
-  def __init__(self,classes,html,css):
+  def __init__(self,classes,templates,html,css):
     super().__init__("div",["container"],html=html,css=css)
     css << Template(templates.css_container).render(board["container"])
 
 class Grid(Element):
-  def __init__(self,classes,html,css):
+  def __init__(self,classes,templates,html,css):
     super().__init__("div",["grid"],html=html,css=css)
     css << Template(templates.css_grid).render(board["grid"])
         
 class Frame(Element):
-  def __init__(self,name,id,classes,html,css):
+  def __init__(self,name,id,classes,templates,html,css):
     super().__init__(name,classes,html,css)
     with Style(f"f{id+1}",css) as st:
       self.css << f"grid-area: f{id+1};"
 
 class Figure(Frame):
-  def __init__(self,name,id,classes,html,css):
-    super().__init__("figure",id,classes,html,css)
+  def __init__(self,name,id,classes,templates,html,css):
+    super().__init__("figure",id,classes,templates,html,css)
 
     # html << f"""<img src="{board['frame'][id]["img"]}" alt="Board image" class="frame_figure">"""
     html << Template(templates.html_frame_figure).render({"image": board['frame'][id]["img"]})
 
 class Text(Frame):
-  def __init__(self,name,id,classes,html,css):
-    super().__init__("div",id,classes,html,css)
+  def __init__(self,name,id,classes,templates,html,css):
+    super().__init__("div",id,classes,templates,html,css)
 
     html << Template(templates.html_frame_text).render({"text": board['frame'][id]["text"]})
     # html << f"""{board['frame'][id]["text"]}"""
@@ -142,11 +142,54 @@ class Page:
   def __init__(self):
     pass
 
-class Board(Page):
-  def __init__(self):
-    pass
+class BoardPage(Page):
+  def __init__(self,board):
+    self.board = board
 
-  def render(self):      
+  def render(self): 
+    board = self.board
+
+    template_file = board["template_file"]
+    print(template_file)   
+    template_spec = importlib.util.spec_from_file_location("templates", template_file)
+    templates = importlib.util.module_from_spec(template_spec)
+    sys.modules["templates"] = templates
+    template_spec.loader.exec_module(templates)
+
+    html_complete = Stream()
+    html_body = Stream()
+    css = Stream()
+
+    css << Template(templates.css_glob).render(board["glob"])
+    css << Template(templates.css_modale).render(board["modale"])
+
+    with Body(classes=[],templates=templates,html=html_body,css=css):
+      with Main(classes=[],templates=templates,html=html_body,css=css):
+      #  with H1(classes=[],html=html_body,css=css) as h1:
+      #   h1.html << "mon titre"
+       with Container(classes=[],templates=templates,html=html_body,css=css) as c:
+        with Grid(classes=[],templates=templates,html=html_body,css=css) as g:
+          css << Template(templates.css_frame_figure).render(board["frame_figure"])
+          css << Template(templates.css_frame_text).render(board["frame_text"])
+          for (i,f) in enumerate(board["frame"]) :
+            # with Element(f["elt"],classes=[f"f{i}"]) as elt:
+            with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],templates=templates,html=html_body,css=css) as elt:
+              pass
+
+      html_body << Template(templates.html_modale).render({})
+
+    html_complete << "<!DOCTYPE html>"
+    with Html(html=html_complete,templates=templates,css=css):
+      with Head(html=html_complete):
+        html_complete << Template(templates.html_head).render({"inline_style": css})
+      html_complete << html_body  
+
+    # html_file = os.path.join(board_dir,"index.html")
+    with open(board["output_file"],"w") as f:  
+      print(html_complete, file=f)
+
+    print(html_complete)
+
 
 if __name__=="__main__":
 
@@ -163,41 +206,6 @@ usage: {sys.argv[0]} working_dir board_name
 
   os.chdir(board_dir)
 
-  template_file = board["template_file"]
-  print(template_file)   
-  template_spec = importlib.util.spec_from_file_location("templates", template_file)
-  templates = importlib.util.module_from_spec(template_spec)
-  sys.modules["templates"] = templates
-  template_spec.loader.exec_module(templates)
-
-  html_complete = Stream()
-  html_body = Stream()
-  css = Stream()
-
-  css << Template(templates.css_glob).render(board["glob"])
-
-  with Body(classes=[],html=html_body,css=css):
-    with Main(classes=[],html=html_body,css=css):
-    #  with H1(classes=[],html=html_body,css=css) as h1:
-    #   h1.html << "mon titre"
-     with Container(classes=[],html=html_body,css=css) as c:
-       with Grid(classes=[],html=html_body,css=css) as g:
-         css << Template(templates.css_frame_figure).render(board["frame_figure"])
-         css << Template(templates.css_frame_text).render(board["frame_text"])
-         for (i,f) in enumerate(board["frame"]) :
-           # with Element(f["elt"],classes=[f"f{i}"]) as elt:
-           with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],html=html_body,css=css) as elt:
-             pass
-
-  html_complete << "<!DOCTYPE html>"
-  with Html(html=html_complete,css=css):
-    with Head(html=html_complete):
-      html_complete << Template(templates.html_head).render({"inline_style": css})
-    html_complete << html_body  
-
-  # html_file = os.path.join(board_dir,"index.html")
-  with open(board["output_file"],"w") as f:  
-    print(html_complete, file=f)
-
-  print(html_complete)
-
+  page = BoardPage(board)
+  page.render()
+  

@@ -64,8 +64,5 @@ frame_text:
   color: yellow
   font_weight: 900
 
-
-
-#  
-#   
-# 
+modale:
+  background: black
