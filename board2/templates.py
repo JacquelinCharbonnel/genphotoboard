@@ -71,6 +71,8 @@ html_head = """
   <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,400,400i|Nunito:300,300i" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+  <link rel="stylesheet" href="photoswipe/dist/photoswipe.css">
+
   <style>
     {{inline_style}}
   </style>
@@ -102,7 +104,19 @@ html_head = """
       }) ;
     }
   </script>
+
+  <script type="module">
+  import PhotoSwipeLightbox from 'photoswipe/dist/photoswipe-lightbox.esm.js';
+  const lightbox = new PhotoSwipeLightbox({
+    gallery: '#my-gallery',
+    children: 'a',
+    pswpModule: () => import('photoswipe/dist/photoswipe.esm.js')
+  });
+  lightbox.init();
+  </script>
+
   <title>CSS Grids Gallery</title>
+
 """        
 
 html_frame_figure = """
@@ -122,6 +136,49 @@ html_modale = """
         <img src="" alt="" />
       </div>
     </div>
+
+<div class="pswp-gallery pswp-gallery--single-column" id="gallery--getting-started">
+  <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-2500.jpg" 
+    data-pswp-width="1669" 
+    data-pswp-height="2500" 
+    target="_blank">
+    <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/2/img-200.jpg" alt="" />
+  </a>
+  <!-- cropped thumbnail: -->
+  <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/7/img-2500.jpg" 
+    data-pswp-width="1875" 
+    data-pswp-height="2500" 
+    data-cropped="true" 
+    target="_blank">
+    <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/7/img-200.jpg" alt="" />
+    Cropped
+  </a>
+  <!-- data-pswp-src with custom URL in href -->
+  <a href="https://unsplash.com" 
+    data-pswp-src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-2500.jpg"
+    data-pswp-width="2500" 
+    data-pswp-height="1666" 
+    target="_blank">
+    <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-200.jpg" alt="" />
+  </a>
+  <!-- Without thumbnail: -->
+  <a href="http://example.com" 
+    data-pswp-src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/5/img-2500.jpg"
+    data-pswp-width="2500" 
+    data-pswp-height="1668" 
+    target="_blank">
+    No thumbnail
+  </a>
+  <!-- wrapped with any element: -->
+  <div>
+    <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-2500.jpg"
+      data-pswp-width="2500" 
+      data-pswp-height="1667" 
+      target="_blank">
+      <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-200.jpg" alt="" />
+    </a>
+  </div>
+</div>
 """
 
 css_modale = """
