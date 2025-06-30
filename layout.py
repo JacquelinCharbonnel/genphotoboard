@@ -15,6 +15,11 @@ https://www.cssportal.com/css-flexbox-generator/
 
 https://tutorialzine.com/2017/02/freebie-4-bootstrap-galleries
 https://fr.piwigo.org/piwigo-cest-quoi
+
+https://lokeshdhakar.com/projects/lightbox2/#examplesc
+https://www.digitalia.be/software/slimbox2/#downloadc
+https://photoswipe.com/
+https://github.com/dimsemenov/Magnific-Popup
 """
 
 import sys, os, importlib
