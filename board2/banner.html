@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,400,400i|Nunito:300,300i" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="photoswipe/dist/photoswipe.css">
+  <link rel="shortcut icon" type="image/png" href="img/favicon.png">
+  <style>
+      
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit; 
+  }
+
+
+.modale {
+  display: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  background-color: black;
+}
+
+.modale.show {
+  display: initial;
+}
+
+.modale-content {
+  width: 90%;
+  margin: auto;
+  /* max-width: 1200px; */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+}
+
+.modale-content img {
+  width: 100%;
+} 
+
+.close {
+  color: white ;
+  font-size: 2em;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  color: #333;
+  font-weight: 300;
+  line-height: 1.6; 
+  background-color: #022d5593;
+}
+
+
+.container {
+  width: 90%;
+  margin: 1rem auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
+  grid-template-rows: repeat(9, 5vw);
+  grid-gap: 1.5rem;
+  justify-items: center;
+  grid-template-areas:
+".. .. .. f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3"
+".. .. .. f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3"
+"f2 f2 f2 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3"
+".. .. .. f3 f3 f3 f3 f3 f3 f3 f3 f3 f3 f3"
+"f4 f4 f4 f4 f4 f4 f4 f4 f1 f1 f1 f1 f1 f1"
+"f4 f4 f4 f4 f4 f4 f4 f4 f1 f1 f1 f1 f1 f1"
+"f4 f4 f4 f4 f4 f4 f4 f4 f1 f1 f1 f1 f1 f1"
+"f4 f4 f4 f4 f4 f4 f4 f4 f1 f1 f1 f1 f1 f1"
+"f4 f4 f4 f4 f4 f4 f4 f4 .. .. .. .. .. .."
+
+;
+}
+
+.frame_figure {
+  width: 100%;
+  height: 100%;
+  # object-fit: cover;
+  object-fit: scale-down; #jc
+  display: block; 
+}
+
+.frame_text {
+  font-size: 1.5vw;
+  color: yellow;
+  font-weight: 900;
+}
+.f1 {
+  grid-area: f1;
+}
+
+.f2 {
+  grid-area: f2;
+}
+
+.f3 {
+  grid-area: f3;
+}
+
+.f4 {
+  grid-area: f4;
+}
+
+
+html {
+  box-sizing: border-box;
+  font-size: 100%; 
+  }
+
+  ul {
+   display: flex;
+   list-style-type: none;
+   overflow: hidden;
+   margin-block-start: 1em;
+   margin-block-end: 1em;
+  align-items: center;
+  }
+
+  ul li {
+    flex: 0 0 20%;
+    max-width: 20%;
+    position: relative;
+  }
+  
+  ul li img {
+    padding: 3%;
+  }
+  
+  </style>
+  <xscript>
+    window.onload = () => {
+      const modale = document.querySelector("#modale");
+      const close = document.querySelector(".close");
+      const links = document.querySelectorAll(".grid figure a");
+      console.log(links)
+
+      for (let link of links) {
+        link.addEventListener("click", function(e) {
+          e.preventDefault();
+
+          console.log(link)
+          const image = modale.querySelector(".modale-content img");
+          image.src = this.href;
+
+          modale.classList.add("show");
+        }) ;
+      }
+
+      close.addEventListener("click", function() {
+        modale.classList.remove("show");
+      }) ;
+
+      modale.addEventListener("click", function() {
+        modale.classList.remove("show");
+      }) ;
+    }
+  </xscript>
+
+<script type="module">
+import PhotoSwipeLightbox from '../PhotoSwipe/dist/photoswipe-lightbox.esm.js';
+const lightbox = new PhotoSwipeLightbox({
+  gallery: '#my-gallery',
+  children: 'a',
+  pswpModule: () => import('../PhotoSwipe/dist/photoswipe.esm.js')
+});
+lightbox.init();
+</script>
+
+  <title>CSS Grids Gallery</title>
+  </head> <!-- None -->
+  <body>
+  <main>
+    <div class="container">
+      <div class="gridx">
+        <h2>réSidenceS SolariSéeS</h2>
+        <ul>
+          <li>
+        <figure class="f1">
+          
+        <a href="index.html" >
+          <img src="DSC04878.webp" alt="Board image" class="frame_figure">
+        </a>  
+        </figure> <!-- ['f1'] -->
+        </li><li>
+
+        <figure class="f3">
+          
+        <a href="index.html" >
+          <img src="DSC04881.webp" alt="Board image" class="frame_figure">
+        </a>  
+        </figure> <!-- ['f3'] -->
+        </li><li>
+        <figure class="f4">
+          
+        <a href="index.html" >
+          <img src="DSC04882.webp" alt="Board image" class="frame_figure">
+        </a>  
+        </figure> <!-- ['f4'] -->
+        </li>
+        </ul>
+      </div> <!-- ['grid'] -->
+    </div> <!-- ['container'] -->
+  </main> <!-- [] -->
+  
+    <!-- <div id="modale" class="modale">
+      <span class="close">&times;</span>
+      <div class="modale-content">
+        <img src="" alt="" />
+      </div>
+    </div> -->
+
+  <div class="pswp-gallery pswp-gallery--single-column" id="gallery--getting-started">
+    <a href="DSC04882.webp" 
+      data-pswp-width="1669" 
+      data-pswp-height="2500" 
+      target="_blank">
+      <img src="DSC04882.webp" alt="" />
+    </a>
+    <!-- cropped thumbnail: -->
+    <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/7/img-2500.jpg" 
+      data-pswp-width="1875" 
+      data-pswp-height="2500" 
+      data-cropped="true" 
+      target="_blank">
+      <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/7/img-200.jpg" alt="" />
+      Cropped
+    </a>
+    <!-- data-pswp-src with custom URL in href -->
+    <a href="https://unsplash.com" 
+      data-pswp-src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-2500.jpg"
+      data-pswp-width="2500" 
+      data-pswp-height="1666" 
+      target="_blank">
+      <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/3/img-200.jpg" alt="" />
+    </a>
+    <!-- Without thumbnail: -->
+    <a href="http://example.com" 
+      data-pswp-src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/5/img-2500.jpg"
+      data-pswp-width="2500" 
+      data-pswp-height="1668" 
+      target="_blank">
+      No thumbnail
+    </a>
+    <!-- wrapped with any element: -->
+    <div>
+      <a href="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-2500.jpg"
+        data-pswp-width="2500" 
+        data-pswp-height="1667" 
+        target="_blank">
+        <img src="https://cdn.photoswipe.com/photoswipe-demo-images/photos/6/img-200.jpg" alt="" />
+      </a>
+    </div>
+  </div>
+
+</body> <!-- [] -->
+</html> <!-- None -->
