@@ -1,0 +1,59 @@
+---
+
+template_file: ./thumbnail.py
+output_file: ./thumbnail.html
+class: ThumbnailPage
+
+glob: []
+
+html:
+  font_size: "100%"
+
+header: []
+
+body:
+  background_color: "#022d5593"
+  # font_size : 4vw
+
+main: 
+  width: 90%
+  margin: auto
+
+container: []
+
+ul: []
+li: []
+img: []
+
+# img: 
+#   - DSC04878.webp  
+#   - DSC04881.webp  
+#   - DSC04882.webp
+
+frame:
+  - text: "Résidences solarisées</span>"
+    color: red
+    elt: Text
+    
+  - img: DSC04878.webp  
+    elt: Figure
+
+  - img: DSC04881.webp  
+    elt: Figure
+    
+  # - img: DSC04881.webp 
+    # elt: Figure
+    
+  - img: DSC04882.webp
+    elt: Figure
+    
+  # - img: carte.png  
+  #   elt: Figure
+
+frame_figure: []
+
+frame_text: 
+  font_size: 1.8vw
+  color: yellow
+  font_weight: 900
+
