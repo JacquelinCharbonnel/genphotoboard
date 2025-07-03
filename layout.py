@@ -153,17 +153,24 @@ class Frame(Element):
       self.css << f"grid-area: f{id+1};"
 
 class Figure(Frame):
-  def __init__(self,name,id,classes,yml,html,css):
+  def __init__(self,name,id,classes,h,yml,html,css):
     super().__init__("figure",id,classes,yml,html,css)
     templates = yml["run"]["templates"]
     # html << f"""<img src="{yml['frame'][id]["img"]}" alt="yml image" class="frame_figure">"""
-    html << Template(templates.html_frame_figure).render({"image": yml['frame'][id]["img"]})
+    html << Template(templates.html_frame_figure).render({
+        "image": h["frame"]["img"]
+      , "target": h["target"]
+      })
 
 class Text(Frame):
-  def __init__(self,name,id,classes,yml,html,css):
+  def __init__(self,name,id,classes,h,yml,html,css):
     super().__init__("div",id,classes,yml,html,css)
     templates = yml["run"]["templates"]
-    html << Template(templates.html_frame_text).render({"text": yml['frame'][id]["text"]})
+    # html << Template(templates.html_frame_text).render({"text": yml['frame'][id]["text"]})
+    html << Template(templates.html_frame_text).render({
+      "text": h["frame"]["text"]
+      , "target": h["target"]
+      })
     # html << f"""{yml['frame'][id]["text"]}"""
 
 class Page:
@@ -204,7 +211,18 @@ class BoardPage(Page):
           css << Template(templates.css_frame_text).render(yml["frame_text"])
           for (i,f) in enumerate(yml["frame"]) :
             # with Element(f["elt"],classes=[f"f{i}"]) as elt:
-            with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],yml=yml,html=html_body,css=css) as elt:
+            with eval(f["elt"])(
+              name=f"f{i+1}"
+              , id=i
+              , classes=[f"f{i+1}"]
+              , h= {
+                  "frame": yml["frame"][i]
+                  , "target": yml["frame"][i]["target"]
+                }
+              , yml=yml
+              , html=html_body
+              , css=css
+              ) as elt:
               pass
 
       html_body << Template(templates.html_modale).render({})
@@ -235,6 +253,7 @@ class ThumbnailPage(Page):
 
     css << Template(templates.css_glob).render(yml["glob"])
     # css << Template(templates.css_modale).render(yml["modale"])
+    css << Template(templates.css_main).render(yml["main"])
     css << Template(templates.css_container).render(yml["container"])
     css << Template(templates.css_ul).render(yml["ul"])
     css << Template(templates.css_li).render(yml["li"])
@@ -243,13 +262,25 @@ class ThumbnailPage(Page):
     css << Template(templates.css_frame_text).render(yml["frame_text"])
 
     with Body(classes=[],yml=yml,html=html_body,css=css):
-     with Container(classes=[],yml=yml,html=html_body,css=css) as c:
-      with Ul(classes=[],yml=yml,html=html_body,css=css) as ul:
-          for (i,f) in enumerate(yml["frame"]) :
-            # with Element(f["elt"],classes=[f"f{i}"]) as elt:
-           with Li(classes=[],yml=yml,html=html_body,css=css) as li:
-            with eval(f["elt"])(name=f"f{i+1}",id=i,classes=[f"f{i+1}"],yml=yml,html=html_body,css=css) as elt:
-              pass
+      with Main(classes=[],yml=yml,html=html_body,css=css):
+       for (k,container) in enumerate(yml["container"]):
+        with Container(classes=[],yml=yml,html=html_body,css=css) as c:
+          with Ul(classes=[],yml=yml,html=html_body,css=css) as ul:
+              for (i,f) in enumerate(yml["container"][k]["frame"]) :
+                with Li(classes=[],yml=yml,html=html_body,css=css) as li:
+                  with eval(f["elt"])(
+                    name=f"f{i+1}"
+                    , id=i
+                    , classes=[f"f{i+1}"]
+                    , h= {
+                        "frame": yml["container"][k]["frame"][i]
+                        , "target": yml["container"][k]["target"]
+                      }
+                    , yml=yml
+                    , html=html_body
+                    , css=css
+                    ) as elt:
+                    pass
 
       # html_body << Template(templates.html_modale).render({})
 
@@ -257,7 +288,9 @@ class ThumbnailPage(Page):
     with Html(html=html_complete,yml=yml,css=css):
       with Head(html=html_complete):
         html_complete << Template(templates.html_head).render({"inline_style": css})
-      html_complete << html_body  
+      with Body(classes=[],yml=yml,html=html_body,css=css):
+        html_complete << Template(templates.html_body).render({"inline_body": html_body})
+      # html_complete << html_body  
 
     # html_file = os.path.join(yml_dir,"index.html")
     with open(yml["output_file"],"w") as f:  

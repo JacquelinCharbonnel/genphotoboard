@@ -39,20 +39,24 @@ grid:
 #    "f5 f5 f5 f5 f5 f5 f5 f5 .. .. .. .. .. .."
 
 frame:
-  - img: DSC04878.webp  
+  - img: DSC04878.webp
+    target: DSC04878.webp  
     elt: Figure
 
   - text: "ré<span style='font-size: 200%'>S</span>idence<span style='font-size: 200%'>S</span> <span style='font-size: 200%'>S</span>olari<span style='font-size: 200%'>S</span>ée<span style='font-size: 200%'>S</span>"
+    target: 
     color: red
     elt: Text
     
   - img: DSC04881.webp  
+    target: DSC04881.webp  
     elt: Figure
     
   # - img: DSC04881.webp 
     # elt: Figure
     
   - img: DSC04882.webp
+    target: DSC04882.webp  
     elt: Figure
     
   # - img: carte.png  

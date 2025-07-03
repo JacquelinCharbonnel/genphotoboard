@@ -28,7 +28,14 @@ body {
   background-color: {{background_color}};
 }"""
 
-css_main = ""
+css_main = """
+main {
+  font-family: "Nunito", sans-serif;
+  color: #333;
+  font-weight: 300;
+  line-height: 1.6; 
+  background-color: {{background_color}};
+}"""
 
 css_container = """
 .container {
@@ -36,7 +43,6 @@ css_container = """
   margin: 1rem auto;
 }"""
   
-
 css_ul = """
 .container ul {
  display: flex;
@@ -96,14 +102,22 @@ html_head = """
 
 """        
 
+html_body = """
+    avant
+    {{inline_body}}
+    après
+"""        
+
 html_frame_figure = """
-        <a href="{{image}}" target="max">
+        <a href="{{target}}">
           <img src="{{image}}" alt="Board image" class="frame_figure">
         </a>  
 """
 
 html_frame_text = """
-        <div class="frame_text">{{text}}</div>
+        <a href="{{target}}">
+          <div class="frame_text">{{text}}</div>
+        </a>  
 """
 
 

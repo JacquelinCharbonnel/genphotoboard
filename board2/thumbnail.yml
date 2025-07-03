@@ -18,6 +18,7 @@ body:
 main: 
   width: 90%
   margin: auto
+  background_color: black
 
 container: []
 
@@ -56,4 +57,35 @@ frame_text:
   font_size: 1.8vw
   color: yellow
   font_weight: 900
+
+container:
+  - target: index.html
+    frame:
+      - text: Résidences solarisées
+        color: red
+        elt: Text
+
+      - img: DSC04878.webp  
+        elt: Figure
+
+      - img: DSC04881.webp  
+        elt: Figure
+
+      - img: DSC04882.webp
+        elt: Figure
+
+  - target: index.html
+    frame:
+      - text: blabla
+        color: red
+        elt: Text
+
+      - img: DSC04881.webp  
+        elt: Figure
+
+      - img: DSC04882.webp
+        elt: Figure
+
+      - img: DSC04878.webp  
+        elt: Figure
 
