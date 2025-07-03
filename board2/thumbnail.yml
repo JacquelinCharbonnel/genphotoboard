@@ -1,7 +1,12 @@
 ---
 
 template_file: ./thumbnail.py
-output_file: ./thumbnail.html
+output_page: ./thumbnail.html
+output_css: ./thumbnail.css
+output_main: ./main.html
+build_dir: build
+img_dir: ..
+
 class: ThumbnailPage
 
 glob: []

@@ -1,7 +1,8 @@
 ---
 
 template_file: ./templates.py
-output_file: ./index.html
+output_page: ./index.html
+output_css: ./index.css
 class: BoardPage
 
 glob: []

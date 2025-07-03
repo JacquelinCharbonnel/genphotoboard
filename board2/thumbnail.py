@@ -99,12 +99,13 @@ html_head = """
   </style>
 
   <title>CSS Grids Gallery</title>
-
 """        
 
 html_body = """
     avant
+   <main>
     {{inline_body}}
+   </main> 
     après
 """        
 

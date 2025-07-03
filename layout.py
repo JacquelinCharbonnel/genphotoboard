@@ -185,6 +185,15 @@ class Page:
     yml["run"] = {}
     yml["run"]["templates"] = templates
 
+  def write(self,where,what):
+    # fn = os.path.join(self.yml["build_dir"],where)
+    fn = where
+    print(f"writing {fn} in {os.getcwd()}")
+    with open(fn,"w") as f:  
+      print(what, file=f)
+
+
+
 class BoardPage(Page):
   def __init__(self,yml):
     super().__init__(yml)
@@ -234,10 +243,12 @@ class BoardPage(Page):
       html_complete << html_body  
 
     # html_file = os.path.join(yml_dir,"index.html")
-    with open(yml["output_file"],"w") as f:  
-      print(html_complete, file=f)
+    # with open(yml["output_file"],"w") as f:  
+    #   print(html_complete, file=f)
+    self.write(yml["output_css"],css)
+    self.write(yml["output_page"],html_complete)
 
-    print(html_complete)
+    # print(html_complete)
 
 class ThumbnailPage(Page):
   def __init__(self,yml):
@@ -261,9 +272,9 @@ class ThumbnailPage(Page):
     css << Template(templates.css_frame_figure).render(yml["frame_figure"])
     css << Template(templates.css_frame_text).render(yml["frame_text"])
 
-    with Body(classes=[],yml=yml,html=html_body,css=css):
-      with Main(classes=[],yml=yml,html=html_body,css=css):
-       for (k,container) in enumerate(yml["container"]):
+    # with Body(classes=[],yml=yml,html=html_body,css=css):
+    # with Main(classes=[],yml=yml,html=html_body,css=css):
+    for (k,container) in enumerate(yml["container"]):
         with Container(classes=[],yml=yml,html=html_body,css=css) as c:
           with Ul(classes=[],yml=yml,html=html_body,css=css) as ul:
               for (i,f) in enumerate(yml["container"][k]["frame"]) :
@@ -275,6 +286,7 @@ class ThumbnailPage(Page):
                     , h= {
                         "frame": yml["container"][k]["frame"][i]
                         , "target": yml["container"][k]["target"]
+                        ,
                       }
                     , yml=yml
                     , html=html_body
@@ -288,15 +300,15 @@ class ThumbnailPage(Page):
     with Html(html=html_complete,yml=yml,css=css):
       with Head(html=html_complete):
         html_complete << Template(templates.html_head).render({"inline_style": css})
-      with Body(classes=[],yml=yml,html=html_body,css=css):
+      with Body(classes=[],yml=yml,html=html_complete,css=css):
         html_complete << Template(templates.html_body).render({"inline_body": html_body})
       # html_complete << html_body  
 
-    # html_file = os.path.join(yml_dir,"index.html")
-    with open(yml["output_file"],"w") as f:  
-      print(html_complete, file=f)
+    self.write(yml["output_css"],css)
+    self.write(yml["output_main"],html_body)
+    self.write(yml["output_page"],html_complete)
 
-    print(html_complete)
+    # print(html_complete)
 
 if __name__=="__main__":
 
